@@ -1,0 +1,5 @@
+C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trainbenchmark.exe
+C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trainbenchmark.pdb
+C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trinity.Core.dll
+C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.exe
+C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.pdb
