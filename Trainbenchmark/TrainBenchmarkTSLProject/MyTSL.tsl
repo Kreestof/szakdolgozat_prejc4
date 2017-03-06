@@ -1,0 +1,84 @@
+enum Position {
+	FAILURE,
+	STATE,
+	DIVERGING	
+}
+
+enum Signal {
+	FAILURE,
+	STOP,
+	GO	
+}
+
+cell struct RailwayContainer
+{
+	[GraphEdge]	
+	List<int> routes;
+	[GraphEdge]
+	List<int> regions;
+}
+
+cell struct TrackElement
+{
+	[GraphEdge]
+	List<int> monitors;
+	[GraphEdge]
+	List<int> connectsTo;
+}
+
+cell struct Semaphore
+{
+	Signal signal;
+}
+
+cell struct Route
+{
+	[GraphEdge]
+	List<int> requires;
+	[GraphEdge]
+	List<int> follows;
+	[GraphEdge]
+	int entry;
+	[GraphEdge]
+	int exit;
+	bool active;
+	
+}
+
+cell struct Region
+{
+	[GraphEdge]
+	List<int> sensors;
+	[GraphEdge]
+	List<int> elements;
+}
+
+
+[GraphNode, BaseType:TrackElement]
+cell struct Switch
+{
+	Position currentPosition;
+	[GraphEdge]
+	List<int> positions;
+}
+
+cell struct Sensor {
+	[GraphEdge]
+	List<int> monitors;
+}
+
+[GraphNode, BaseType : TrackElement]
+cell struct Segment {
+	int length;
+	[GraphNode]
+	List<int> semaphores;
+}
+
+cell struct SwitchPosition 
+{
+	Position position;
+	[GraphEdge]
+	int route;
+	[GraphEdge]
+	int target;
+}
