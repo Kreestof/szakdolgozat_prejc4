@@ -3,3 +3,13 @@ C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trainben
 C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trinity.Core.dll
 C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.exe
 C:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.pdb
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.exe
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\obj\x64\Debug\Trainbenchmark.pdb
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trainbenchmark.exe
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trainbenchmark.pdb
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\dotNetRDF.dll
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\HtmlAgilityPack.dll
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Newtonsoft.Json.dll
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\TrainBenchmarkTSLProject.dll
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\Trinity.Core.dll
+c:\Kristof\BME\szakdolgozat\szakdolgozat_prejc4\Trainbenchmark\Trainbenchmark\bin\x64\Debug\VDS.Common.dll

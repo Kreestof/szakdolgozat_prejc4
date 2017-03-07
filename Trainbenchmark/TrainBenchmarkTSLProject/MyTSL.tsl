@@ -13,17 +13,17 @@ enum Signal {
 cell struct RailwayContainer
 {
 	[GraphEdge]	
-	List<int> routes;
+	List<CellId> routes;
 	[GraphEdge]
-	List<int> regions;
+	List<CellId> regions;
 }
 
 cell struct TrackElement
 {
 	[GraphEdge]
-	List<int> monitors;
+	List<CellId> monitors;
 	[GraphEdge]
-	List<int> connectsTo;
+	List<CellId> connectsTo;
 }
 
 cell struct Semaphore
@@ -34,13 +34,13 @@ cell struct Semaphore
 cell struct Route
 {
 	[GraphEdge]
-	List<int> requires;
+	List<CellId> requires;
 	[GraphEdge]
-	List<int> follows;
+	List<CellId> follows;
 	[GraphEdge]
-	int entry;
+	CellId entry;
 	[GraphEdge]
-	int exit;
+	CellId exit;
 	bool active;
 	
 }
@@ -48,9 +48,9 @@ cell struct Route
 cell struct Region
 {
 	[GraphEdge]
-	List<int> sensors;
+	List<CellId> sensors;
 	[GraphEdge]
-	List<int> elements;
+	List<CellId> elements;
 }
 
 
@@ -59,26 +59,26 @@ cell struct Switch
 {
 	Position currentPosition;
 	[GraphEdge]
-	List<int> positions;
+	List<CellId> positions;
 }
 
 cell struct Sensor {
 	[GraphEdge]
-	List<int> monitors;
+	List<CellId> monitors;
 }
 
 [GraphNode, BaseType : TrackElement]
 cell struct Segment {
 	int length;
 	[GraphNode]
-	List<int> semaphores;
+	List<CellId> semaphores;
 }
 
 cell struct SwitchPosition 
 {
 	Position position;
 	[GraphEdge]
-	int route;
+	CellId route;
 	[GraphEdge]
-	int target;
+	CellId target;
 }
