@@ -18,14 +18,6 @@ cell struct RailwayContainer
 	List<CellId> regions;
 }
 
-cell struct TrackElement
-{
-	[GraphEdge]
-	List<CellId> monitors;
-	[GraphEdge]
-	List<CellId> connectsTo;
-}
-
 cell struct Semaphore
 {
 	Signal signal;
@@ -57,6 +49,10 @@ cell struct Region
 [GraphNode, BaseType:TrackElement]
 cell struct Switch
 {
+	[GraphEdge]
+	List<CellId> monitors;
+	[GraphEdge]
+	List<CellId> connectsTo;	
 	Position currentPosition;
 	[GraphEdge]
 	List<CellId> positions;
@@ -69,6 +65,10 @@ cell struct Sensor {
 
 [GraphNode, BaseType : TrackElement]
 cell struct Segment {
+	[GraphEdge]
+	List<CellId> monitors;
+	[GraphEdge]
+	List<CellId> connectsTo;
 	int length;
 	[GraphNode]
 	List<CellId> semaphores;
