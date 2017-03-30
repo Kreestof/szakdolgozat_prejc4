@@ -50,7 +50,7 @@ cell struct Region
 cell struct Switch
 {
 	[GraphEdge]
-	List<CellId> monitors;
+	List<CellId> monitoredBy;
 	[GraphEdge]
 	List<CellId> connectsTo;	
 	Position currentPosition;
@@ -66,7 +66,7 @@ cell struct Sensor {
 [GraphNode, BaseType : TrackElement]
 cell struct Segment {
 	[GraphEdge]
-	List<CellId> monitors;
+	List<CellId> monitoredBy;
 	[GraphEdge]
 	List<CellId> connectsTo;
 	int length;

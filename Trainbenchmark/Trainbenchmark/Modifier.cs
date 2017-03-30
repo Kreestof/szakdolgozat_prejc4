@@ -5,27 +5,35 @@ using System.Text;
 using System.Threading.Tasks;
 using Trinity;
 using TrainBenchmarkTSLProject;
-using FanoutSearch.LIKQ;
-using VDS.RDF;
-using VDS.RDF.Parsing;
 
 namespace Trainbenchmark
 {
-    class Validator
+    class Modifier
     {
-        public void check()
+        public void routeSensorInject(int numberOfRoutes)
         {
-            if (routeSensor() && switchSet())
+            Random random = new Random();
+            var routes = Global.LocalStorage.Route_Accessor_Selector().Take(numberOfRoutes);
+            foreach (var route in routes)
             {
-                Console.WriteLine("Success!");
-            }
-            else
-            {
-                Console.WriteLine("Wrong model!");
+                if (route.requires.Count > 0)
+                {
+                    route.requires.RemoveAt(random.Next(0, route.requires.Count - 1));
+                }
             }
         }
 
-        public bool routeSensor()
+        public void switchSetInject(int numberOfSwitches)
+        {
+            Random random = new Random();
+            var switches = Global.LocalStorage.Switch_Accessor_Selector().Take(numberOfSwitches);
+            foreach (var sw in switches)
+            {
+                sw.currentPosition = sw.currentPosition == Position.DIVERGING ? Position.FAILURE : sw.currentPosition + 1;
+            }
+        }
+
+        public void routeSensorRepair()
         {
             List<Route> rs = new List<Route>();
             var routes = from r in Global.LocalStorage.Route_Selector()
@@ -43,20 +51,20 @@ namespace Trainbenchmark
                     {
                         target = switchPosition.target;
                     }
+                    List<long> missingRequireEdges = new List<long>();
                     using (var sw = Global.LocalStorage.UseSwitch(target))
                     {
-                        if (sw.monitoredBy.Except(r.requires).Any())
-                        {
-                            return false;
-                        }
+                        missingRequireEdges = sw.monitoredBy.Except(r.requires).ToList();
+                    }
+                    using (var route = Global.LocalStorage.UseRoute(r.CellID))
+                    {
+                        route.requires.AddRange(missingRequireEdges);
                     }
                 }
-
             }
-            return true;
         }
 
-        public bool switchSet()
+        public void switchSetRepair()
         {
             List<long> semaphoreIDs = new List<long>();
             var semaphores = from s in Global.LocalStorage.Semaphore_Selector()
@@ -65,7 +73,6 @@ namespace Trainbenchmark
             semaphoreIDs = semaphores.ToList();
             foreach (var semaphoreID in semaphoreIDs)
             {
-
                 List<List<long>> routeFollows = new List<List<long>>();
                 var routes = from r in Global.LocalStorage.Route_Selector()
                              where r.entry == semaphoreID
@@ -82,14 +89,13 @@ namespace Trainbenchmark
                         }
                         using (var sw = Global.LocalStorage.UseSwitch(swP.target))
                         {
-                            if (sw.currentPosition != swP.position)
-                                return false;
+                            sw.currentPosition = swP.position;
                         }
                     }
                 }
             }
-            return true;
         }
+
 
     }
 }

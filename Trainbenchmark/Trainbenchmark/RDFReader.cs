@@ -12,7 +12,7 @@ namespace Trainbenchmark
 {
     class RDFReader
     {
-        public void read()
+        public void batch()
         {
             TrinityConfig.CurrentRunningMode = RunningMode.Embedded;
             IGraph g = new Graph();
@@ -96,6 +96,7 @@ namespace Trainbenchmark
                     case "#Switch":
                         int switchId = int.Parse(((UriNode)b.Subject).Uri.Fragment.Substring(2));
                         Position switchCurrentPosition = Position.FAILURE;
+                        List<long> switchMonitoredBy = new List<long>();
                         foreach (var triple in g.GetTriplesWithSubject(b.Subject))
                         {
                             switch (triple.Predicate.ToString().Split('#')[1])
@@ -104,11 +105,14 @@ namespace Trainbenchmark
                                     // az Id típusú mezőknél 2 karaktert kell levágni, mert "#_" kezdődik, itt viszont csak a '#' lesz benne
                                     switchCurrentPosition = getPositionFromString(((UriNode)triple.Object).Uri.Fragment.Substring(1));
                                     break;
+                                case "monitoredBy":
+                                    switchMonitoredBy.Add(int.Parse(((UriNode)triple.Object).Uri.Fragment.Substring(2)));
+                                    break;
                                 default:
                                     break;
                             }
                         }
-                        Switch sw = new Switch(cell_id: switchId, currentPosition: switchCurrentPosition);
+                        Switch sw = new Switch(cell_id: switchId, currentPosition: switchCurrentPosition, monitoredBy: switchMonitoredBy);
                         Global.LocalStorage.SaveSwitch(sw);
                         break;
                     case "#Sensor":
@@ -120,6 +124,7 @@ namespace Trainbenchmark
                         int segmentId = int.Parse(((UriNode)b.Subject).Uri.Fragment.Substring(2));
                         int segmentLength = -1;
                         List<long> segmentSemaphores = new List<long>();
+                        List<long> segmentMonitoredBy = new List<long>();
                         foreach (var triple in g.GetTriplesWithSubject(b.Subject))
                         {
                             switch (triple.Predicate.ToString().Split('#')[1])
@@ -130,11 +135,14 @@ namespace Trainbenchmark
                                 case "semaphores":
                                     segmentSemaphores.Add(int.Parse(((UriNode)triple.Object).Uri.Fragment.Substring(2)));
                                     break;
+                                case "monitoredBy":
+                                    segmentMonitoredBy.Add(int.Parse(((UriNode)triple.Object).Uri.Fragment.Substring(2)));
+                                    break;
                                 default:
                                     break;
                             }
                         }
-                        Segment segment = new Segment(cell_id: segmentId, length: segmentLength, semaphores: segmentSemaphores);
+                        Segment segment = new Segment(cell_id: segmentId, length: segmentLength, semaphores: segmentSemaphores, monitoredBy: segmentMonitoredBy);
                         Global.LocalStorage.SaveSegment(segment);
                         break;
                     case "#SwitchPosition":
@@ -171,15 +179,9 @@ namespace Trainbenchmark
                 }
             }
             Global.LocalStorage.SaveStorage();
-            //var semaphores = from sema in Global.LocalStorage.Semaphore_Accessor_Selector()
-            //                 select sema.signal;
-            //foreach (var semaphore in semaphores)
-            //{
-            //    Console.WriteLine(semaphore.ToString());
-            //}
-            //Console.ReadLine();
         }
-        private Signal getSignalFromString(string s)
+
+        public static Signal getSignalFromString(string s)
         {
             switch (s)
             {
@@ -194,7 +196,7 @@ namespace Trainbenchmark
             }
         }
 
-        private Position getPositionFromString(string s)
+        public static Position getPositionFromString(string s)
         {
             switch (s)
             {

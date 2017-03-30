@@ -713,9 +713,9 @@
             <param name="fieldName">The name of the field.</param>
             <returns>The existence of the field.</returns>
         </member>
-        <member name="P:TrainBenchmarkTSLProject.Switch_Accessor.monitors">
+        <member name="P:TrainBenchmarkTSLProject.Switch_Accessor.monitoredBy">
             <summary>
-            Provides in-place access to the object field monitors.
+            Provides in-place access to the object field monitoredBy.
             </summary>
         </member>
         <member name="P:TrainBenchmarkTSLProject.Switch_Accessor.connectsTo">
@@ -1008,9 +1008,9 @@
             <param name="fieldName">The name of the field.</param>
             <returns>The existence of the field.</returns>
         </member>
-        <member name="P:TrainBenchmarkTSLProject.Segment_Accessor.monitors">
+        <member name="P:TrainBenchmarkTSLProject.Segment_Accessor.monitoredBy">
             <summary>
-            Provides in-place access to the object field monitors.
+            Provides in-place access to the object field monitoredBy.
             </summary>
         </member>
         <member name="P:TrainBenchmarkTSLProject.Segment_Accessor.connectsTo">
