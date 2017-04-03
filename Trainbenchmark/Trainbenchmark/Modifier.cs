@@ -5,36 +5,54 @@ using System.Text;
 using System.Threading.Tasks;
 using Trinity;
 using TrainBenchmarkTSLProject;
+using System.IO;
 
 namespace Trainbenchmark
 {
+
+
     class Modifier
     {
+        private StreamWriter file;
+
+        public Modifier(StreamWriter streamWriter)
+        {
+            file = streamWriter;
+        }
+
         public void routeSensorInject(int numberOfRoutes)
         {
+            int i = 1;
+            file.WriteLine("****** RouteSensor INJECT transformation ******");
             Random random = new Random();
-            var routes = Global.LocalStorage.Route_Accessor_Selector().Take(numberOfRoutes);
+            var routes = Global.LocalStorage.Route_Accessor_Selector();
             foreach (var route in routes)
             {
                 if (route.requires.Count > 0)
                 {
-                    route.requires.RemoveAt(random.Next(0, route.requires.Count - 1));
+                    int removeableEdge = random.Next(0, route.requires.Count - 1);
+                    file.WriteLine("Removing require edge (" + removeableEdge + ") from Route (" + route.CellID + ")");
+                    route.requires.RemoveAt(removeableEdge);
+                    if (++i > numberOfRoutes) break;
                 }
             }
         }
 
         public void switchSetInject(int numberOfSwitches)
         {
+            file.WriteLine("****** SwitchSet INJECT transformation ******");
             Random random = new Random();
             var switches = Global.LocalStorage.Switch_Accessor_Selector().Take(numberOfSwitches);
             foreach (var sw in switches)
             {
+                file.WriteLine("Currentposition of Switch (" + sw.CellID + ") set to (" + (sw.currentPosition == Position.DIVERGING ? Position.FAILURE : sw.currentPosition + 1) + ")");
                 sw.currentPosition = sw.currentPosition == Position.DIVERGING ? Position.FAILURE : sw.currentPosition + 1;
             }
         }
 
         public void routeSensorRepair()
         {
+            file.WriteLine("****** RouteSensor REPAIR transformation ******");
             List<Route> rs = new List<Route>();
             var routes = from r in Global.LocalStorage.Route_Selector()
                          select new { r.CellID, r.follows, r.requires };
@@ -58,7 +76,11 @@ namespace Trainbenchmark
                     }
                     using (var route = Global.LocalStorage.UseRoute(r.CellID))
                     {
-                        route.requires.AddRange(missingRequireEdges);
+                        foreach (var missingRequireEdge in missingRequireEdges)
+                        {
+                            file.WriteLine("Adding require edge (" + missingRequireEdge + ") to Route (" + route.CellID + ")");
+                            route.requires.Add(missingRequireEdge);
+                        }
                     }
                 }
             }
@@ -66,6 +88,7 @@ namespace Trainbenchmark
 
         public void switchSetRepair()
         {
+            file.WriteLine("****** SwitchSet REPAIR transformation ******");
             List<long> semaphoreIDs = new List<long>();
             var semaphores = from s in Global.LocalStorage.Semaphore_Selector()
                              where s.signal == Signal.GO
@@ -89,7 +112,11 @@ namespace Trainbenchmark
                         }
                         using (var sw = Global.LocalStorage.UseSwitch(swP.target))
                         {
-                            sw.currentPosition = swP.position;
+                            if(sw.currentPosition!= swP.position)
+                            {
+                                file.WriteLine("Currentposition of Switch (" + sw.CellID + ") set to (" + swP.position + ")");
+                                sw.currentPosition = swP.position;
+                            }
                         }
                     }
                 }

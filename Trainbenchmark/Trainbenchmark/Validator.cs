@@ -8,25 +8,38 @@ using TrainBenchmarkTSLProject;
 using FanoutSearch.LIKQ;
 using VDS.RDF;
 using VDS.RDF.Parsing;
+using System.IO;
 
 namespace Trainbenchmark
 {
     class Validator
     {
+        private StreamWriter file;
+
+        public Validator(StreamWriter streamWriter)
+        {
+            file = streamWriter;
+        }
+
         public void check()
         {
-            if (routeSensor() && switchSet())
+            bool routeSensorBool = routeSensor();
+            bool switchSetBool = switchSet();
+            if (routeSensorBool && switchSetBool)
             {
-                Console.WriteLine("Success!");
+                file.WriteLine("Validation result: Success!");
             }
             else
             {
-                Console.WriteLine("Wrong model!");
+                file.WriteLine("Validation result: Wrong model!");
             }
         }
 
         public bool routeSensor()
         {
+            file.WriteLine("****** RouteSensor VALIDATION ******");
+            bool validationResult = true;
+            int missingEdgeCount = 0;
             List<Route> rs = new List<Route>();
             var routes = from r in Global.LocalStorage.Route_Selector()
                          select new { r.CellID, r.follows, r.requires };
@@ -45,19 +58,27 @@ namespace Trainbenchmark
                     }
                     using (var sw = Global.LocalStorage.UseSwitch(target))
                     {
-                        if (sw.monitoredBy.Except(r.requires).Any())
+                        foreach (var missingRequireEdge in sw.monitoredBy.Except(r.requires))
                         {
-                            return false;
+                            missingEdgeCount++;
+                            validationResult = false;
                         }
+                        //if (sw.monitoredBy.Except(r.requires).Any())
+                        //{
+                        //}
                     }
                 }
 
             }
-            return true;
+            file.WriteLine("Model has " + missingEdgeCount +  " missing require edge");
+            return validationResult;
         }
 
         public bool switchSet()
         {
+            file.WriteLine("****** SwitchSet VALIDATION ******");
+            bool validationResult = true;
+            int wrongPosition = 0;
             List<long> semaphoreIDs = new List<long>();
             var semaphores = from s in Global.LocalStorage.Semaphore_Selector()
                              where s.signal == Signal.GO
@@ -83,12 +104,17 @@ namespace Trainbenchmark
                         using (var sw = Global.LocalStorage.UseSwitch(swP.target))
                         {
                             if (sw.currentPosition != swP.position)
-                                return false;
+                            {
+                                wrongPosition++;
+                                validationResult = false;
+                                //file.WriteLine("Switch (" + sw.CellID + ") has position (" + sw.currentPosition + ") instead of (" + swP.position + ")");
+                            }
                         }
                     }
                 }
             }
-            return true;
+            file.WriteLine("Model has " + wrongPosition + " wrong position");
+            return validationResult;
         }
 
     }

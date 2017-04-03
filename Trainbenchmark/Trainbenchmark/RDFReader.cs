@@ -12,13 +12,20 @@ namespace Trainbenchmark
 {
     class RDFReader
     {
+        private string modelPath;
+
+        public RDFReader(string path)
+        {
+            modelPath = path;
+        }
+
         public void batch()
         {
             TrinityConfig.CurrentRunningMode = RunningMode.Embedded;
             IGraph g = new Graph();
             TurtleParser ttlparser = new TurtleParser();
             //El kell helyezni az állományt!
-            ttlparser.Load(g, @"c:\Kristof\BME\szakdolgozat\Trainbenchmark\Trainbenchmark\sources\railway-batch-1-inferred.ttl");
+            ttlparser.Load(g, modelPath);
 
             var typeNode = g.CreateUriNode("rdf:type");
             var triples = g.GetTriplesWithPredicate(typeNode);
@@ -178,7 +185,7 @@ namespace Trainbenchmark
                         break;
                 }
             }
-            Global.LocalStorage.SaveStorage();
+            //Global.LocalStorage.SaveStorage();
         }
 
         public static Signal getSignalFromString(string s)
