@@ -7,6 +7,7 @@ using Trinity;
 using VDS.RDF;
 using VDS.RDF.Parsing;
 using TrainBenchmarkTSLProject;
+using Trinity.Network;
 
 namespace Trainbenchmark
 {
@@ -19,7 +20,7 @@ namespace Trainbenchmark
             modelPath = path;
         }
 
-        public void batch()
+        public void read()
         {
             TrinityConfig.CurrentRunningMode = RunningMode.Embedded;
             IGraph g = new Graph();

@@ -8,9 +8,6 @@ EndProject
 Project("{FD8A01E6-12A1-461A-AF0E-51EBE962703F}") = "TrainBenchmarkTSLProject", "TrainBenchmarkTSLProject\TrainBenchmarkTSLProject.tproj", "{84E03E47-1A6F-4CF2-8ACE-592F94CE5823}"
 EndProject
 Global
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
